@@ -11,7 +11,8 @@ import Administration from './Pages/Administration';
 import Settings from './Pages/Settings';
 import Payroll from "./Pages/Payroll";
 import DailyLog from './Pages/DailyLog';
-import TaskManagement from './Pages/TaskManagement';
+import TaskManagement from './Pages/Time/TaskManagement';
+
 function App() {
     return (
         <Router>
@@ -35,6 +36,7 @@ function App() {
 
                                 <Route path="/payroll" element={<PayrollForm />} />
                                 <Route path="/task" element={<TaskManagement />} />
+
                                 <Route path="/settings" element={<Settings />} />
                             </Routes>
                         </div>
