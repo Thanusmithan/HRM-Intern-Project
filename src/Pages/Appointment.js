@@ -248,8 +248,12 @@
 //-------------------------------------updated----------------------------------------------------
 
 import React, { useState } from 'react';
-import { Table, Button, Form, Modal, Card, Dropdown } from 'react-bootstrap';
+import { Table, Button, Form, Modal, Card, Dropdown, Breadcrumb } from 'react-bootstrap';
 import { useEmployeeDetails } from "../Componets/Employee";
+import '../App.css';
+
+
+import { Link } from 'react-router-dom';
 
 const Appointment = () => {
     const { employees } = useEmployeeDetails(); // Get employees data from the hook
@@ -409,8 +413,8 @@ const Appointment = () => {
                 appt.appointmentDate,
             ])
         ]
-        .map(e => e.join(","))
-        .join("\n");
+            .map(e => e.join(","))
+            .join("\n");
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement("a");
@@ -422,200 +426,207 @@ const Appointment = () => {
     };
 
     return (
-        <Card className="appointment-page no-border">
-            <Card.Header className="d-flex justify-content-between align-items-center mx-3 mb-2">
-                <h5 className="mb-0">Appointment</h5>
-                <div className="d-flex align-items-center">
-                    <Form className="d-flex" style={{ width: '400px' }}>
-                        <Form.Control
-                            type="search"
-                            placeholder="Search by Employee Name"
-                            className="me-2"
-                            value={searchTerm}
-                            onChange={handleSearchChange} // Handle search input change
-                        />
-                    </Form>
-                    <Button variant="success" onClick={handleAdd} className="me-2 d-flex align-items-center">
-                        <i className="bi bi-plus-circle me-1"></i>
-                        Add
-                    </Button>
-                    <Button variant="outline-primary" onClick={handleExport} className="d-flex align-items-center">
-                        <i className="bi bi-file-earmark-arrow-up me-1"></i>
-                        Export
-                    </Button>
-                </div>
-            </Card.Header>
-            <Card.Body>
-                <Table striped bordered hover responsive className="align-middle">
-                    <thead>
-                        <tr>
-                            <th>Employee Name</th>
-                            <th>ID</th>
-                            <th>Status</th>
-                            <th>Shift</th>
-                            <th>Department</th>
-                            <th>Role</th>
-                            <th>Joining Date</th>
-                            <th>Appointment Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {appointments
-                            .filter(appointment => appointment.profile.toLowerCase().includes(searchTerm.toLowerCase())) // Filter based on search term
-                            .map((appointment) => (
-                                <tr key={appointment.id}>
-                                    <td className="d-flex align-items-center">
-                                        <img
-                                            src={`https://i.pravatar.cc/150?img=${appointment.id.slice(-1)}`} // Use a slice to generate an image index based on ID
-                                            alt={appointment.profile}
-                                            className="rounded-circle me-2"
-                                            width="40"
-                                            height="40"
-                                        />
-                                        <span>{appointment.profile}</span>
-                                    </td>
-                                    <td>{appointment.id}</td>
-                                    <td>
-                                        <Button
-                                            variant={getStatusVariant(appointment.status)}
-                                            size="sm"
-                                            className="px-3"
-                                        >
-                                            {appointment.status}
-                                        </Button>
-                                    </td>
-                                    <td>{appointment.appointmentTime}</td>
-                                    <td>{appointment.department}</td>
-                                    <td>{appointment.role}</td>
-                                    <td>{appointment.joiningDate}</td>
-                                    <td>{appointment.appointmentDate}</td>
-                                    <td>
-                                        <Dropdown drop="start" className="">
-                                            <Dropdown.Toggle variant="secondary" id={`dropdown-basic-${appointment.id}`}>
-                                                <i className="bi bi-three-dots-vertical"></i>
-                                            </Dropdown.Toggle>
-
-                                            <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => handleEdit(appointment)}>
-                                                    <i className="bi bi-pencil-fill me-2"></i>
-                                                    Edit
-                                                </Dropdown.Item>
-                                                <Dropdown.Item onClick={() => handleDelete(appointment.id)} className="text-danger">
-                                                    <i className="bi bi-trash-fill me-2"></i>
-                                                    Delete
-                                                </Dropdown.Item>
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </td>
-                                </tr>
-                            ))}
-                    </tbody>
-                </Table>
-                <Modal show={showModal} onHide={() => setShowModal(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>{isEditing ? 'Edit Appointment' : 'Add Appointment'}</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Form>
-                            <Form.Group controlId="formProfile">
-                                <Form.Label>Employee Name:</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    name="profile"
-                                    value={modalData.profile}
-                                    onChange={handleChange}
-                                >
-                                    <option value="">Select Employee</option>
-                                    {employees.map((employee) => (
-                                        <option key={employee.id} value={employee.profile}>
-                                            {employee.profile}
-                                        </option>
-                                    ))}
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group controlId="formId">
-                                <Form.Label>ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="id"
-                                    value={modalData.id}
-                                    readOnly // Make ID read-only since it auto-populates
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formStatus">
-                                <Form.Label>Status</Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    name="status"
-                                    value={modalData.status}
-                                    onChange={handleChange}
-                                >
-                                    <option>Full-Time</option>
-                                    <option>Part-Time</option>
-                                    <option>Seasonal</option>
-                                    <option>On-contract</option>
-                                </Form.Control>
-                            </Form.Group>
-                            <Form.Group controlId="formAppointmentTime">
-                                <Form.Label>Shift</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="appointmentTime"
-                                    value={modalData.appointmentTime}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formDepartment">
-                                <Form.Label>Department</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="department"
-                                    value={modalData.department}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formRole">
-                                <Form.Label>Role</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="role"
-                                    value={modalData.role}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formJoiningDate">
-                                <Form.Label>Joining Date</Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    name="joiningDate"
-                                    value={modalData.joiningDate}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
-                            <Form.Group controlId="formAppointmentDate">
-                                <Form.Label>Appointment Date</Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    name="appointmentDate"
-                                    value={modalData.appointmentDate}
-                                    onChange={handleChange}
-                                />
-                            </Form.Group>
+        <>
+            <Breadcrumb className="ms-3">
+                <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/hrm" }}>HRM</Breadcrumb.Item>
+                <Breadcrumb.Item linkAs={Link} linkProps={{ to: "#" }}>Employee</Breadcrumb.Item>
+                <Breadcrumb.Item active>Appointment</Breadcrumb.Item>
+            </Breadcrumb>
+            <Card className="appointment-page no-border">
+                <Card.Header className="d-flex justify-content-between align-items-center mx-3 mb-2">
+                    <h5 className="mb-0">Appointment</h5>
+                    <div className="d-flex align-items-center">
+                        <Form className="d-flex" style={{ width: '400px' }}>
+                            <Form.Control
+                                type="search"
+                                placeholder="Search by Employee Name"
+                                className="me-2"
+                                value={searchTerm}
+                                onChange={handleSearchChange} // Handle search input change
+                            />
                         </Form>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setShowModal(false)}>
-                            Close
+                        <Button variant="success" onClick={handleAdd} className="me-2 d-flex align-items-center">
+                            <i className="bi bi-plus-circle me-1"></i>
+                            Add
                         </Button>
-                        <Button variant="primary" onClick={handleSave}>
-                            Save Changes
+                        <Button variant="outline-primary" onClick={handleExport} className="d-flex align-items-center">
+                            <i className="bi bi-file-earmark-arrow-up me-1"></i>
+                            Export
                         </Button>
-                    </Modal.Footer>
-                </Modal>
-            </Card.Body>
-        </Card>
-    );
+                    </div>
+                </Card.Header>
+                <Card.Body>
+                    <Table striped bordered hover responsive className="align-middle">
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>ID</th>
+                                <th>Status</th>
+                                <th>Shift</th>
+                                <th>Department</th>
+                                <th>Role</th>
+                                <th>Joining Date</th>
+                                <th>Appointment Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {appointments
+                                .filter(appointment => appointment.profile.toLowerCase().includes(searchTerm.toLowerCase())) // Filter based on search term
+                                .map((appointment) => (
+                                    <tr key={appointment.id}>
+                                        <td className="d-flex align-items-center">
+                                            <img
+                                                src={`https://i.pravatar.cc/150?img=${appointment.id.slice(-1)}`} // Use a slice to generate an image index based on ID
+                                                alt={appointment.profile}
+                                                className="rounded-circle me-2"
+                                                width="40"
+                                                height="40"
+                                            />
+                                            <span>{appointment.profile}</span>
+                                        </td>
+                                        <td>{appointment.id}</td>
+                                        <td>
+                                            <Button
+                                                variant={getStatusVariant(appointment.status)}
+                                                size="sm"
+                                                className="px-3"
+                                            >
+                                                {appointment.status}
+                                            </Button>
+                                        </td>
+                                        <td>{appointment.appointmentTime}</td>
+                                        <td>{appointment.department}</td>
+                                        <td>{appointment.role}</td>
+                                        <td>{appointment.joiningDate}</td>
+                                        <td>{appointment.appointmentDate}</td>
+                                        <td>
+                                            <Dropdown drop="start" className="">
+                                                <Dropdown.Toggle variant="secondary" id={`dropdown-basic-${appointment.id}`}>
+                                                    <i className="bi bi-three-dots-vertical"></i>
+                                                </Dropdown.Toggle>
+
+                                                <Dropdown.Menu>
+                                                    <Dropdown.Item onClick={() => handleEdit(appointment)}>
+                                                        <i className="bi bi-pencil-fill me-2"></i>
+                                                        Edit
+                                                    </Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => handleDelete(appointment.id)} className="text-danger">
+                                                        <i className="bi bi-trash-fill me-2"></i>
+                                                        Delete
+                                                    </Dropdown.Item>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </td>
+                                    </tr>
+                                ))}
+                        </tbody>
+                    </Table>
+                    <Modal show={showModal} onHide={() => setShowModal(false)}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{isEditing ? 'Edit Appointment' : 'Add Appointment'}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <Form>
+                                <Form.Group controlId="formProfile">
+                                    <Form.Label>Employee Name:</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="profile"
+                                        value={modalData.profile}
+                                        onChange={handleChange}
+                                    >
+                                        <option value="">Select Employee</option>
+                                        {employees.map((employee) => (
+                                            <option key={employee.id} value={employee.profile}>
+                                                {employee.profile}
+                                            </option>
+                                        ))}
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="formId">
+                                    <Form.Label>ID</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="id"
+                                        value={modalData.id}
+                                        readOnly // Make ID read-only since it auto-populates
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formStatus">
+                                    <Form.Label>Status</Form.Label>
+                                    <Form.Control
+                                        as="select"
+                                        name="status"
+                                        value={modalData.status}
+                                        onChange={handleChange}
+                                    >
+                                        <option>Full-Time</option>
+                                        <option>Part-Time</option>
+                                        <option>Seasonal</option>
+                                        <option>On-contract</option>
+                                    </Form.Control>
+                                </Form.Group>
+                                <Form.Group controlId="formAppointmentTime">
+                                    <Form.Label>Shift</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="appointmentTime"
+                                        value={modalData.appointmentTime}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formDepartment">
+                                    <Form.Label>Department</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="department"
+                                        value={modalData.department}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formRole">
+                                    <Form.Label>Role</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="role"
+                                        value={modalData.role}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formJoiningDate">
+                                    <Form.Label>Joining Date</Form.Label>
+                                    <Form.Control
+                                        type="date"
+                                        name="joiningDate"
+                                        value={modalData.joiningDate}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                                <Form.Group controlId="formAppointmentDate">
+                                    <Form.Label>Appointment Date</Form.Label>
+                                    <Form.Control
+                                        type="date"
+                                        name="appointmentDate"
+                                        value={modalData.appointmentDate}
+                                        onChange={handleChange}
+                                    />
+                                </Form.Group>
+                            </Form>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="secondary" onClick={() => setShowModal(false)}>
+                                Close
+                            </Button>
+                            <Button variant="primary" onClick={handleSave}>
+                                Save Changes
+                            </Button>
+                        </Modal.Footer>
+                    </Modal>
+                </Card.Body>
+            </Card>
+            </>
+            );
 };
 
-export default Appointment;
+            export default Appointment;
