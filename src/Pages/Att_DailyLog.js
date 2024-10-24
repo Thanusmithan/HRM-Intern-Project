@@ -400,7 +400,8 @@
 //----------------------------------updated----------------------------------
 
 import React, { useState } from 'react';
-import { Table, Card, Button, Dropdown, Form } from 'react-bootstrap';
+import { Table, Card, Button, Dropdown, Form, Breadcrumb } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useEmployeeDetails } from "../Componets/Employee";
@@ -508,149 +509,156 @@ const Att_DailyLog = () => {
     };
 
     return (
-        <Card className="no-border">
-            <Card.Header className="d-flex justify-content-between align-items-center mx-3 mb-2">
-                <h5 className="mb-0">Daily Log</h5>
+        <>
+            <Breadcrumb className="ms-3">
+                <Breadcrumb.Item linkAs={Link} linkProps={{ to: "/hrm" }}>HRM</Breadcrumb.Item>
+                <Breadcrumb.Item linkAs={Link} linkProps={{ to: "#" }}>Attendance</Breadcrumb.Item>
+                <Breadcrumb.Item active>Daily Log</Breadcrumb.Item>
+            </Breadcrumb>
+            <Card className="no-border">
+                <Card.Header className="d-flex justify-content-between align-items-center mx-3 mb-2">
+                    <h5 className="mb-0">Daily Log</h5>
 
-                <div className="d-flex align-items-center">
-                    <Form className="d-flex me-2" style={{ width: '400px' }}>
-                        <Form.Control
-                            type="search"
-                            placeholder="Search by Employee Name"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="me-2"
-                        />
-                    </Form>
-                    <Button 
-                        variant="outline-primary" 
-                        className="d-flex align-items-center"
-                        onClick={exportToCSV} // Call export function on click
-                    >
-                        <i className="bi bi-file-earmark-arrow-up me-1"></i>
-                        Export
-                    </Button>
-                </div>
-            </Card.Header>
+                    <div className="d-flex align-items-center">
+                        <Form className="d-flex me-2" style={{ width: '400px' }}>
+                            <Form.Control
+                                type="search"
+                                placeholder="Search by Employee Name"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="me-2"
+                            />
+                        </Form>
+                        <Button
+                            variant="outline-primary"
+                            className="d-flex align-items-center"
+                            onClick={exportToCSV} // Call export function on click
+                        >
+                            <i className="bi bi-file-earmark-arrow-up me-1"></i>
+                            Export
+                        </Button>
+                    </div>
+                </Card.Header>
 
-            <Card.Body id="table-to-pdf">
-                <Table striped bordered hover size="sm" className="text-center">
-                    <thead>
-                        <tr>
-                            <th>Employee Name</th>
-                            <th>ID</th>
-                            <th>Punch In</th>
-                            <th>Punch Out</th>
-                            <th>Department</th>
-                            <th>Status</th>
-                            <th>Working Hours</th>
-                            <th>Worked Status</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredData.map((row, index) => {
-                            const { hours, minutes } = calculateWorkingHours(row.punchIn, row.punchOut);
-                            const workedStatus = getWorkedStatus(hours); // Calculate worked status
+                <Card.Body id="table-to-pdf">
+                    <Table striped bordered hover size="sm" className="text-center">
+                        <thead>
+                            <tr>
+                                <th>Employee Name</th>
+                                <th>ID</th>
+                                <th>Punch In</th>
+                                <th>Punch Out</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Working Hours</th>
+                                <th>Worked Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredData.map((row, index) => {
+                                const { hours, minutes } = calculateWorkingHours(row.punchIn, row.punchOut);
+                                const workedStatus = getWorkedStatus(hours); // Calculate worked status
 
-                            return (
-                                <tr key={row.id}>
-                                    <td>
-                                        <div className="d-flex align-items-center">
-                                            {/* Display employee image */}
-                                            <img
-                                                src={`https://i.pravatar.cc/150?img=${index + 1}`} // Use the placeholder image generator
-                                                alt={row.profile}
-                                                style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
-                                            />
+                                return (
+                                    <tr key={row.id}>
+                                        <td>
+                                            <div className="d-flex align-items-center">
+                                                {/* Display employee image */}
+                                                <img
+                                                    src={`https://i.pravatar.cc/150?img=${index + 1}`} // Use the placeholder image generator
+                                                    alt={row.profile}
+                                                    style={{ width: '40px', height: '40px', borderRadius: '50%', marginRight: '10px' }}
+                                                />
+                                                {editIndex === index ? (
+                                                    <Form.Control
+                                                        type="text"
+                                                        name="profile"
+                                                        value={editedRow.profile}
+                                                        onChange={(e) => setEditedRow({ ...editedRow, profile: e.target.value })}
+                                                        className="form-control"
+                                                    />
+                                                ) : (
+                                                    row.profile
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td>{row.id}</td>
+                                        <td>
                                             {editIndex === index ? (
-                                                <Form.Control
-                                                    type="text"
-                                                    name="profile"
-                                                    value={editedRow.profile}
-                                                    onChange={(e) => setEditedRow({ ...editedRow, profile: e.target.value })}
-                                                    className="form-control"
+                                                <DatePicker
+                                                    selected={editedRow.punchIn}
+                                                    onChange={(date) => handleDateChange(date, 'punchIn')}
+                                                    showTimeSelect
+                                                    timeIntervals={30}
+                                                    timeCaption="Time"
+                                                    dateFormat="h:mm aa"
+                                                    className="form-control mb-3"
                                                 />
                                             ) : (
-                                                row.profile
+                                                row.punchIn
+                                                    ? row.punchIn.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+                                                    : 'N/A'
                                             )}
-                                        </div>
-                                    </td>
-                                    <td>{row.id}</td>
-                                    <td>
-                                        {editIndex === index ? (
-                                            <DatePicker
-                                                selected={editedRow.punchIn}
-                                                onChange={(date) => handleDateChange(date, 'punchIn')}
-                                                showTimeSelect
-                                                timeIntervals={30}
-                                                timeCaption="Time"
-                                                dateFormat="h:mm aa"
-                                                className="form-control mb-3"
-                                            />
-                                        ) : (
-                                            row.punchIn
-                                                ? row.punchIn.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
-                                                : 'N/A'
-                                        )}
-                                    </td>
-                                    <td>
-                                        {editIndex === index ? (
-                                            <DatePicker
-                                                selected={editedRow.punchOut}
-                                                onChange={(date) => handleDateChange(date, 'punchOut')}
-                                                showTimeSelect
-                                                timeIntervals={30}
-                                                timeCaption="Time"
-                                                dateFormat="h:mm aa"
-                                                className="form-control mb-3"
-                                            />
-                                        ) : (
-                                            row.punchOut
-                                                ? row.punchOut.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
-                                                : 'N/A'
-                                        )}
-                                    </td>
-                                    <td>{row.department}</td>
-                                    <td>
-                                        {row.punchIn && !row.punchOut ? 'Working' : row.punchOut ? 'Finished' : 'Not Started'}
-                                    </td>
-                                    <td>{`${hours}h ${minutes}m`}</td>
-                                    <td>{workedStatus}</td> {/* Display worked status */}
-                                    <td>
-                                        <Dropdown drop="start">
-                                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                                                <i className="bi bi-three-dots-vertical"></i>
-                                            </Dropdown.Toggle>
+                                        </td>
+                                        <td>
+                                            {editIndex === index ? (
+                                                <DatePicker
+                                                    selected={editedRow.punchOut}
+                                                    onChange={(date) => handleDateChange(date, 'punchOut')}
+                                                    showTimeSelect
+                                                    timeIntervals={30}
+                                                    timeCaption="Time"
+                                                    dateFormat="h:mm aa"
+                                                    className="form-control mb-3"
+                                                />
+                                            ) : (
+                                                row.punchOut
+                                                    ? row.punchOut.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
+                                                    : 'N/A'
+                                            )}
+                                        </td>
+                                        <td>{row.department}</td>
+                                        <td>
+                                            {row.punchIn && !row.punchOut ? 'Working' : row.punchOut ? 'Finished' : 'Not Started'}
+                                        </td>
+                                        <td>{`${hours}h ${minutes}m`}</td>
+                                        <td>{workedStatus}</td> {/* Display worked status */}
+                                        <td>
+                                            <Dropdown drop="start">
+                                                <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+                                                    <i className="bi bi-three-dots-vertical"></i>
+                                                </Dropdown.Toggle>
 
-                                            <Dropdown.Menu>
-                                                {editIndex === index ? (
-                                                    <>
-                                                        <Dropdown.Item onClick={handleSave}>
-                                                            <i className="bi bi-check-circle me-2"></i>
-                                                            Save
+                                                <Dropdown.Menu>
+                                                    {editIndex === index ? (
+                                                        <>
+                                                            <Dropdown.Item onClick={handleSave}>
+                                                                <i className="bi bi-check-circle me-2"></i>
+                                                                Save
+                                                            </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => setEditIndex(null)}>
+                                                                <i className="bi bi-x-circle me-2"></i>
+                                                                Cancel
+                                                            </Dropdown.Item>
+                                                        </>
+                                                    ) : (
+                                                        <Dropdown.Item onClick={() => handleEdit(index)}>
+                                                            <i className="bi bi-pencil-fill me-2"></i>
+                                                            Edit
                                                         </Dropdown.Item>
-                                                        <Dropdown.Item onClick={() => setEditIndex(null)}>
-                                                            <i className="bi bi-x-circle me-2"></i>
-                                                            Cancel
-                                                        </Dropdown.Item>
-                                                    </>
-                                                ) : (
-                                                    <Dropdown.Item onClick={() => handleEdit(index)}>
-                                                        <i className="bi bi-pencil-fill me-2"></i>
-                                                        Edit
-                                                    </Dropdown.Item>
-                                                )}
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </td>
-                                </tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
-            </Card.Body>
-        </Card>
+                                                    )}
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </Table>
+                </Card.Body>
+            </Card>
+        </>
     );
 };
 
