@@ -1,27 +1,52 @@
-import React from 'react'
-import Tp from './Tp'
+import React from 'react';
+import { Alert, Dropdown } from 'react-bootstrap';
 
-
-const Pending = () => {
-  return (
-    <>
-      <div>
-        <ul className="hidden text-3xl font-bold text-center text-white divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400 rtl:divide-x-reverse" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
-          <li className="w-full ">
-            <button id="pending-tab" data-tabs-target="#pending" type="button" role="tab" aria-controls="stats" aria-selected="true" className="inline-block w-full p-4 bg-orange-500 rounded-t-lg hover:bg-orange-400 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Pending leaves</button>
-          </li>
-
-        </ul>
-      </div>
-      <div>
-        <Tp />
-      </div>
-
-
-
-    </>
-  )
+const Pending = ({ applications, onStatusUpdate }) => {
+    return (
+        <>
+            <Alert variant="info" className='text-center'>
+                <Alert.Heading>Pending Leaves</Alert.Heading>
+            </Alert>
+            <div className="table-responsive">
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Reason</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            applications.map((app) => app.status === "Pending" && (
+                                <tr key={app.id}>
+                                    <td>{app.name}</td>
+                                    <td>{app.department}</td>
+                                    <td>{app.startDate}</td>
+                                    <td>{app.endDate}</td>
+                                    <td>{app.reason}</td>
+                                    <td>{app.status}</td>
+                                    <td>
+                                        <Dropdown>
+                                            <Dropdown.Toggle variant="secondary" id="dropdown-basic">Take Action</Dropdown.Toggle>
+                                            <Dropdown.Menu>
+                                                <Dropdown.Item onClick={() => onStatusUpdate(app.id, 'Approved')}>Approve</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => onStatusUpdate(app.id, 'Rejected')}>Reject</Dropdown.Item>
+                                            </Dropdown.Menu>
+                                        </Dropdown>
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </>
+    );
 }
 
-export default Pending
-
+export default Pending;
