@@ -241,8 +241,13 @@ const AttendanceDetails = () => {
                                 ))}
                             </Dropdown.Menu>
                         </Dropdown>
-                        <Button variant="outline-primary" onClick={exportToCSV} className="btn btn-lg" style={{padding:'3px 12px',}}>
-                            <i className="bi bi-file-earmark-arrow-up" style={{height:'5px'}}></i> <span style={{fontSize:'15px'}}>Export</span>
+                        <Button
+                            variant="outline-primary"
+                            className="d-flex align-items-center"
+                            onClick={exportToCSV} // Call export function on click
+                        >
+                            <i className="bi bi-file-earmark-arrow-up me-1"></i>
+                            Export
                         </Button>
                     </div>
                 </Card.Header>
