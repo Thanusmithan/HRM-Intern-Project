@@ -3,6 +3,73 @@ import { useEmployeeDetails } from "../Componets/Employee";
 import { Table, Card, Button, Dropdown, Form, Modal, Breadcrumb } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
+export const employeesData = [
+  {
+    profile: "Jeremy Neigh",
+    id: "A0B1C001",
+    status: "Part-Time",
+    department: "Support",
+    shift: "8h-17h",
+    joiningDate: "9/23/16",
+    role: "Tax Officer",
+  },
+  {
+    profile: "Emily Johnson",
+    id: "A0B1C002",
+    status: "Full-Time",
+    department: "Finance",
+    shift: "9h-18h",
+    joiningDate: "1/15/18",
+    role: "Accountant",
+  },
+  {
+    profile: "Mark Smith",
+    id: "A0B1C003",
+    status: "Full-Time",
+    department: "IT",
+    shift: "10h-19h",
+    joiningDate: "5/20/19",
+    role: "Software Engineer",
+  },
+  {
+    profile: "Sophia Williams",
+    id: "A0B1C004",
+    status: "Part-Time",
+    department: "Human Resources",
+    shift: "9h-13h",
+    joiningDate: "3/12/20",
+    role: "HR Manager",
+  },
+  {
+    profile: "Liam Brown",
+    id: "A0B1C005",
+    status: "Seasonal",
+    department: "Marketing",
+    shift: "10h-19h",
+    joiningDate: "5/21/21",
+    role: "Marketing Specialist",
+  },
+  {
+    profile: "Olivia Garcia",
+    id: "A0B1C006",
+    status: "Full-Time",
+    department: "Sales",
+    shift: "8h-17h",
+    joiningDate: "7/18/22",
+    role: "Sales Executive",
+  },
+  {
+    profile: "Noah Martinez",
+    id: "A0B1C007",
+    status: "Part-Time",
+    department: "Operations",
+    shift: "6h-15h",
+    joiningDate: "9/10/21",
+    role: "Operations Coordinator",
+  },
+  // Add other employee data here...
+];
+
 const AllEmployees = () => {
   const { employees, setEmployees } = useEmployeeDetails();
 
