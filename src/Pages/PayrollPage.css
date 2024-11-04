@@ -1,0 +1,148 @@
+.payroll-page.compact h4 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.payroll-page.compact h6 {
+  font-size: 0.75rem;
+  margin-bottom: 3px;
+}
+
+.payroll-page.compact .form-group {
+  margin-bottom: 0.15rem;
+}
+
+.payroll-page.compact label {
+  font-size: 0.75rem;
+  margin-right: 3px;
+  width: auto;
+  flex: 0 0 75px;
+  margin-bottom: 2px;
+}
+
+.payroll-page.compact .form-control {
+  font-size: 0.75rem;
+  height: 1.2rem;
+  padding: 0.1rem 0.2rem;
+  width: auto;
+  display: inline-block;
+}
+
+.payroll-page.compact .border {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 0.4rem;
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.payroll-page.compact .d-flex {
+  display: flex;
+  align-items: center;
+}
+
+.payroll-page.compact .button-group .btn {
+  padding: 0.2rem 0.4rem;
+  font-size: 0.7rem;
+  margin-right: 0.2rem;
+  width: 89px;
+}
+
+.payroll-page.compact .table {
+  font-size: 0.7rem;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.payroll-page.compact .payslip-section {
+  margin-top: 45px;
+  position: absolute;
+  right: 80px;
+  top: 75px;
+  width: 550px;
+}
+
+.payslip {
+  font-size: 0.75rem;
+  padding: 1.5rem;
+  min-height: 350px;
+  background-color: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 0.5rem;
+}
+
+.payslip p {
+  margin-bottom: 0.3rem;
+}
+
+.payslip-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.payslip-text {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.payroll-page {
+    padding: 1rem;
+  }
+  
+  .payroll-page .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .payroll-page .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .payslip-preview {
+    display: none; /* Hides the preview, only PDF generation is displayed */
+  }
+  
+  .payroll-page h4 {
+    font-size: 1.2rem;
+  }
+  
+  .payroll-page h6 {
+    font-size: 0.75rem;
+  }
+  
+  .payroll-page .table {
+    font-size: 0.7rem;
+  }
+  
+  .payslip {
+    font-size: 0.75rem;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    border-radius: 0.5rem;
+  }
+  
+  .payslip-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .payslip-section {
+    position: absolute;
+    right: 80px;
+    top: 75px;
+    width: 550px;
+    margin-right: -50px;
+  }
+  
+  .payslip-text {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  
+  
