@@ -34,7 +34,7 @@ function App() {
                                 {/* <Route path="/attendance/daily-log" component={DailyLog} /> */}
                                 <Route path="/attendance/daily-log" element={<DailyLog />} />
 
-                                <Route path="/payroll" element={<PayrollForm />} />
+                                <Route path="/payroll" element={<PayrollPage />} />
                                 <Route path="/task" element={<TaskManagement />} />
 
                                 <Route path="/settings" element={<Settings />} />
