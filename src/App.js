@@ -5,7 +5,7 @@ import PayrollForm from "./Pages/PayrollForm";
 import NavigationBar from './Pages/Navbar';
 import Dashboard from './Pages/Dashboard'
 import Employee from './Pages/Employee';
-import Leave from './Pages/Leave';
+import Leave from './Pages/Leave/Leave';
 import Attendance from './Pages/Attendance';
 import Administration from './Pages/Administration';
 import Settings from './Pages/Settings';
