@@ -12,6 +12,7 @@ import Settings from './Pages/Settings';
 import Payroll from "./Pages/Payroll";
 import DailyLog from './Pages/DailyLog';
 import TaskManagement from './Pages/Time/TaskManagement';
+import PayrollPage from './Pages/PayrollPage';
 
 function App() {
     return (
